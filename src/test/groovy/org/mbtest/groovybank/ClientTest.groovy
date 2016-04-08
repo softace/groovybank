@@ -6,7 +6,7 @@ import spock.lang.Specification
 class ClientTest extends Specification {
     Process mountebank
 
-    def "Can create client when mountebank is running"() {
+    def "Can verify Mountebank is running"() {
         given:
         mounteBankIsRunning()
         when:
@@ -18,7 +18,7 @@ class ClientTest extends Specification {
 
     }
 
-    def "Client constructor throws when mountebank is not running"() {
+    def "Can verify Mountebank is not running"() {
         when:
         Client client = new Client()
         then:
@@ -26,24 +26,12 @@ class ClientTest extends Specification {
     }
 
     private void mounteBankIsRunning() {
-        println 'starting'
         mountebank = ['mb', 'start'].execute()
-        sleep 1000
-//
-//        def reader = new BufferedReader(new InputStreamReader(mountebank.getInputStream()))
-//        def line
-//        while ((line = reader.readLine()) != null) {
-//            if (line =~ /now taking orders/){
-//                break
-//            }
-//        }
-        println "started  $mountebank"
+        sleep 1000 //TODO: Could be done nicer based on stdout matching /now taking orders/
     }
 
     private void stopMountebank() {
-        println 'stoping'
         mountebank.waitForOrKill(1)
-        println 'stoped'
     }
 
 }

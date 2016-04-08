@@ -24,8 +24,7 @@ class Client {
     boolean isMountebankRunning() {
         try {
             def mbtest = new RESTClient(baseUrl)
-            def result = mbtest.get(path: '/')
-            return result.statusLine.statusCode == 200
+            return mbtest.get(path: '/').statusLine.statusCode == 200
         } catch (Exception) {
             return false
         }
