@@ -25,9 +25,21 @@ class ClientTest extends Specification {
         !client.isMountebankRunning()
     }
 
+    def "Can create imposter"() {
+        given:
+        mounteBankIsRunning()
+        Client stub = new Client()
+        when:
+        stub.http(4545).responds(statusCode: 200, headers: ['Content-Type': "application/xml"], body: "Hello").end()
+        then:
+        new URL('http://localhost:4545/').getText() == 'Hello'
+        cleanup:
+        stopMountebank()
+    }
+
     private void mounteBankIsRunning() {
         mountebank = ['mb', 'start'].execute()
-        sleep 1000 //TODO: Could be done nicer based on stdout matching /now taking orders/
+        sleep 1000 // TODO: Could be done nicer based on stdout matching /now taking orders/
     }
 
     private void stopMountebank() {
